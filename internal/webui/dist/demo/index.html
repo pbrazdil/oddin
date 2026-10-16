@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Partner demo · Live odds board</title>
+    <link rel="stylesheet" href="/demo/demo.css" />
+    <script src="/embed.js"></script>
+    <script type="module" src="/demo/demo.js"></script>
+  </head>
+  <body>
+    <header class="site">
+      <div class="site__brand">Example Esports Weekly</div>
+      <nav><span>News</span><span>Matches</span><span>Teams</span></nav>
+    </header>
+
+    <main class="page">
+      <p class="lede">
+        This page plays a partner site written in plain HTML and JavaScript. It embeds the live odds board for
+        <strong>Falcons vs Wolves</strong> in three ways. Everything below runs against the same Go backend.
+      </p>
+      <p class="admin-note" id="admin-note" hidden>
+        Superadmin mode: the board below includes the replay and track-record tools. Use “Interrupt feed”
+        in the Simulator tab to watch the board lock, then recover by itself.
+      </p>
+
+      <section class="demo">
+        <h2>1 · Drop-in script <span class="tag">vanilla JS · iframe · auto-height</span></h2>
+        <div class="demo__grid">
+          <div>
+            <div id="board-script"></div>
+            <pre class="code"><code>&lt;div data-oddsboard data-match="match-1" data-market="winner"&gt;&lt;/div&gt;
+&lt;script src="/embed.js" async&gt;&lt;/script&gt;
+
+el.addEventListener('oddsboard:select', (e) =&gt; addToSlip(e.detail));
+el.addEventListener('oddsboard:state', (e) =&gt; lockSlip(!e.detail.actionable));</code></pre>
+          </div>
+          <aside class="side">
+            <div class="slip" id="slip">
+              <h3>Bet slip <span class="muted">(host page)</span></h3>
+              <p class="muted" id="slip-empty">Click a price on the board to add it.</p>
+              <div id="slip-body" hidden>
+                <p id="slip-line"></p>
+                <p class="warn" id="slip-warn" hidden></p>
+                <button type="button" id="slip-place">Place bet</button>
+                <p class="muted small">The host still has to re-validate the price with its betting backend.</p>
+              </div>
+            </div>
+            <h3>postMessage events</h3>
+            <ol class="log" id="log"></ol>
+          </aside>
+        </div>
+      </section>
+
+      <section class="demo">
+        <h2>2 · Plain iframe <span class="tag">HTML only · fixed height</span></h2>
+        <iframe class="fixed" src="/embed/match-1/winner?theme=dark" title="Live odds (dark theme)"></iframe>
+        <pre class="code"><code>&lt;iframe src="/embed/match-1/winner?theme=dark" width="100%" height="172" style="border:0"&gt;&lt;/iframe&gt;</code></pre>
+      </section>
+
+      <section class="demo">
+        <h2>3 · No iframe <span class="tag">vanilla JS · SSE · client.js</span></h2>
+        <div class="vanilla" id="vanilla" aria-live="polite">
+          <div class="vanilla__head"><strong id="v-title">Live odds</strong> <span id="v-status"></span></div>
+          <div class="vanilla__prices" id="v-prices"></div>
+          <div class="vanilla__note" id="v-note"></div>
+        </div>
+        <pre class="code"><code>import { MarketStream, marketUrls } from '/client.js';
+
+const stream = new MarketStream(marketUrls(location.origin, 'match-1', 'winner'));
+stream.subscribe((view) =&gt; render(view)); // view.actionable gates betting
+stream.start();</code></pre>
+      </section>
+    </main>
+  </body>
+</html>

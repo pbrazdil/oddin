@@ -1,0 +1,18 @@
+# Build output
+/bin/
+
+# Runtime data: the audit journal and the admin/feed tokens. Never commit.
+/data/
+
+# Dependencies
+web/node_modules/
+
+# Local tooling and OS clutter
+/.claude/settings.local.json
+.DS_Store
+__MACOSX/
+*.zip
+*.log
+
+# The built frontend in internal/webui/dist IS committed on purpose, so that
+# `go run ./cmd/oddsboard` works without Node. Rebuild it with `make web`.

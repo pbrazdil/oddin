@@ -1,0 +1,7 @@
+[
+  {"matchId":"match-1","marketId":"winner","seq":41,"status":"open","odds":{"falcons":1.85,"wolves":2.05}},
+  {"matchId":"match-1","marketId":"winner","seq":42,"odds":{"falcons":1.80}},
+  {"matchId":"match-1","marketId":"winner","seq":43,"status":"suspended"},
+  {"matchId":"match-1","marketId":"winner","seq":44,"status":"open"},
+  {"matchId":"match-1","marketId":"winner","seq":45,"odds":{"falcons":1.90,"wolves":1.95}}
+]
